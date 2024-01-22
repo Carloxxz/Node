@@ -28,5 +28,6 @@ app.get("/", (req, res) => {
 })
 
 app.post("/submit", (req, res) => {
+  // bandName = req.body["street"] + req.body["pet"] poniendo solo esto sin la funcion, igual funciona perfecto
   res.send(`<h1> Your band name is:</h1><h2>${bandName}</h2>`)
 })

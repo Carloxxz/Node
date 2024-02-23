@@ -3,16 +3,24 @@ import dittoJSON from './pokemon/ditto.json';
 
 
 const processRequest = (req, res) => {
-    const { method, url} = req
+    const { method, url } = req
 
     switch (method) {
         case 'GET':
-            switch(url)
+            switch (url) {
                 case '/pokemon/ditto':
                     res.setHeader('Content/Type', 'application/json; charset=utf-8')
                     return res.end(JSON.stringify(dittoJSON))
-                case '/about':
+                default:
+                    res.statusCode = 404
+            }
+        
+        case 'POST':
+            switch (url) {
+                case '/pokemon':
+                    let body = ''
 
+            }
     }
 }
 

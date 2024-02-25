@@ -5,8 +5,13 @@ const PORT = process.env.PORT ?? 1234
 
 app.disable('x-powered-by')
 
-app.get('/', (req, res) => {
-    res.json({ message: 'hola mundo'})
+
+app.get('/movies', (req, res) => {
+    res.json(movies)
+})
+
+app.get('/adcd/', (req, res) => {
+    const { id } = req.params
 })
 
 app.listen(PORT, () => {

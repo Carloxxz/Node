@@ -2,6 +2,7 @@ const express = require('express')
 const crypto = require('node:crypto')
 const movies = require('./movies.json')
 
+
 const app = express()
 const PORT = process.env.PORT ?? 1234
 app.use(express.json())
@@ -40,6 +41,9 @@ app.get('/movies/:id', (req, res) => {
 })
 
 app.post('/movies', (req, res) => {
+
+
+
     const {
         title,
         genre,

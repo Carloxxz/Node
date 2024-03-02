@@ -33,6 +33,19 @@ app.get('/movies', (req, res) => {
     res.json(movies)
 })
 
+app.delete('/movie/:id', (req, res)=> {
+    const { id } = req.params
+    const movieIndex = movies.findIndex(movie => movie.id == id)
+
+    if (movieIndex == -1) {
+        return res.status(404).json({ message: 'Movie not found'})
+    }
+
+    movies.splice(movieIndex, 1)
+    
+    return req.json({ message: 'Movide deleted' })
+})
+
 app.get('/movies/:id', (req, res) => {
     const { id } = req.params
     const movie = movies.find(movie => movie.id == id)

@@ -1,7 +1,7 @@
 const express = require('express')
 const crypto = require('node:crypto')
 const movies = require('./movies.json')
-const { validateMovie } = require('./schemas/movies')
+const { validateMovie, validatePartialMovie } = require('./schemas/movies.cjs')
 
 
 const app = express()
@@ -49,28 +49,55 @@ app.post('/movies', (req, res) => {
         return res.status(400).json({ error: JSON.parse(result.error.message) })
     }
 
-const newMovie = {
-    id: crypto.randomUUID(), // uuid v4 universal unique id
-    ...result.data
-}
 
-/*
-const {
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate,
-    poster
-} = req.body
-*/
+    const newMovie = {
+        id: crypto.randomUUID(), // uuid v4 universal unique id
+        ...result.data
+    }
 
-//No es REST porque se guarda el estado
-//de la aplicación en memoria
+    /*
+    const {
+        title,
+        genre,
+        year,
+        director,
+        duration,
+        rate,
+        poster
+    } = req.body
+    */
 
-movies.push(newMovie)
-res.status(201).json(newMovie) //actualizar la caché del cliente
+    //No es REST porque se guarda el estado
+    //de la aplicación en memoria
+
+    movies.push(newMovie)
+    res.status(201).json(newMovie) //actualizar la caché del cliente
+})
+
+app.patch('/movies/:id', (req, res) => {
+    const result = validatePartialMovie(req.body)
+
+    if (!result.success) {
+        return res.status(400).json({ error: JSON.parse(result.error.message) })
+    }
+
+    const { id } = req.params
+    const movieIndex = movies.findIndex(movie => movie.id == id)
+
+    if (movieIndex == -1) return res.status(404).json({
+        message: 'Movie not found'
+    })
+
+    const updateMovie = {
+        ...movies[movieIndex],
+        ...result.data
+    }
+
+    movies[movieIndex] = updateMovie
+
+    return res.json(updateMovie)
+
+
 })
 
 app.listen(PORT, () => {
